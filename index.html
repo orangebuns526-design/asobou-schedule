@@ -1,0 +1,1992 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F3EBD8">
+  <title>Asobou 劇團｜排練班表</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #F3EBD8;
+      --card-paper: rgba(255, 251, 241, .84);
+      --red: #B23A30;
+      --navy: #22375A;
+      --deep-blue: #1E2B47;
+      --brown: #C7A37E;
+      --ink: #1B1B1B;
+      --yellow: #E9B949;
+      --muted: #A8B7C4;
+      --line: rgba(30, 43, 71, .78);
+      --soft-line: rgba(30, 43, 71, .48);
+      --paper-shadow: 0 14px 34px rgba(34, 55, 90, .14);
+      --font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      --heading-family: "Noto Serif TC", "Songti TC", "Noto Serif CJK TC", serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background-color: var(--paper);
+      background-image: url("./assets/vintage-paper.png");
+      background-size: cover;
+      background-position: center top;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      color: var(--ink);
+      font-family: var(--font-family);
+      font-weight: 400;
+      line-height: 1.55;
+    }
+    button, input, select { font: inherit; }
+    button { color: inherit; }
+    .page { width: min(1280px, calc(100% - 40px)); margin: 0 auto; }
+    .entry-screen {
+      display: grid; min-height: 100vh; min-height: 100svh; justify-items: center; align-content: center;
+      overflow: clip; padding: 32px 24px;
+      background: transparent;
+    }
+    .entry-card {
+      position: relative; isolation: isolate;
+      width: min(100%, 470px); padding: 28px; border: 0; border-radius: 0;
+      background: transparent; box-shadow: none;
+      text-align: center;
+    }
+    .entry-card::before {
+      position: absolute; z-index: -1; inset: -110px -150px; border-radius: 50%;
+      background: radial-gradient(ellipse at center, rgba(243, 235, 216, .98) 0%, rgba(243, 235, 216, .88) 28%, rgba(243, 235, 216, .5) 58%, rgba(243, 235, 216, .16) 82%, transparent 100%);
+      content: "";
+      pointer-events: none;
+    }
+    .entry-brand { display: flex; align-items: center; justify-content: center; gap: 12px; color: var(--deep-blue); letter-spacing: .12em; }
+    .entry-brand img { width: 58px; height: 58px; border: 0; border-radius: 50%; object-fit: cover; }
+    .entry-card h1 { margin: 22px 0 6px; font-size: clamp(3rem, 6vw, 4rem); }
+    .entry-card h1::before, .entry-card h1::after {
+      display: inline-block; vertical-align: .42em; opacity: .72; content: "";
+    }
+    .entry-card h1::before { margin-right: .45em; color: var(--red); content: "✦"; font: 400 .28em/1 Georgia, serif; }
+    .entry-card h1::after { margin-left: .45em; color: var(--yellow); content: "◆"; font: 400 .28em/1 Georgia, serif; }
+    .entry-description { margin: 0 0 18px; color: var(--deep-blue); font-size: .84rem; }
+    .entry-field { display: grid; width: min(100%, 360px); gap: 6px; margin: 13px auto 0; color: var(--deep-blue); font-size: .82rem; }
+    .entry-field > span:first-child { display: block; }
+    .entry-field select, .entry-field input {
+      width: 100%; padding: 9px 10px; border: 2px solid var(--brown);
+      border-radius: 6px; background: var(--card-paper); color: var(--ink); text-align: center;
+    }
+    .entry-message { min-height: 1.4em; margin: 12px 0; color: var(--red); font-size: .8rem; }
+    .entry-card .primary-button { display: block; width: min(100%, 360px); min-height: 48px; margin: 0 auto; padding: 10px; }
+    .app-identity { color: var(--ink); font-weight: 500; }
+    .logout-button { margin-left: auto; }
+    .casting-display { color: var(--deep-blue); font-size: .84rem; }
+    .overview-table-wrap {
+      width: 100%; max-width: 100%; max-height: min(70vh, 680px);
+      overflow: auto; overscroll-behavior: contain;
+      border: 2px solid var(--line); border-radius: 8px;
+    }
+    .overview-table { width: max-content; min-width: 100%; border-collapse: collapse; font-size: .82rem; }
+    .overview-table th, .overview-table td {
+      padding: 10px 12px; border: 2px solid var(--line);
+      text-align: left; vertical-align: top;
+    }
+    .overview-table th { background: var(--deep-blue); color: var(--paper); font-weight: 700; }
+    .overview-table thead th { position: sticky; top: 0; z-index: 2; }
+    .overview-table th:first-child, .overview-table td:first-child {
+      position: sticky; left: 0; z-index: 1; width: 160px; min-width: 145px;
+      background: var(--card-paper); text-align: left; white-space: nowrap;
+    }
+    .overview-table tbody tr:not(.overview-schedule-row) > th:first-child { color: var(--ink); }
+    .overview-table thead th:first-child { z-index: 3; background: var(--deep-blue); }
+    .overview-table th:not(:first-child), .overview-table td:not(:first-child) {
+      min-width: 110px; text-align: center;
+    }
+    .overview-period { display: block; white-space: nowrap; }
+    .overview-table .overview-schedule-row th,
+    .overview-table .overview-schedule-row td { background: rgba(199, 163, 126, .2); color: var(--ink); }
+    .overview-table .overview-schedule-row th { background: var(--navy); color: var(--paper); }
+    .overview-table .overview-schedule-cell {
+      display: grid; min-width: 110px; gap: 3px; text-align: left;
+    }
+    .overview-schedule-detail { overflow-wrap: anywhere; white-space: normal; }
+    .account-bar { display: flex; align-items: center; gap: 10px; }
+    .account-name { color: var(--deep-blue); font-size: .82rem; }
+    .feature-toolbar {
+      display: flex; align-items: center; gap: 12px; margin: 18px 0 20px;
+      padding: 10px 14px; border: 2px solid var(--brown); border-radius: 9px;
+      background: var(--card-paper); box-shadow: 0 5px 16px rgba(34, 55, 90, .1);
+    }
+    .feature-toolbar h2 { flex: 1; }
+    .feature-home { padding: 22px; border: 2px solid var(--brown); border-radius: 12px; background: var(--card-paper); box-shadow: var(--paper-shadow); }
+    .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 12px; margin-top: 16px; }
+    .feature-button {
+      display: grid; align-content: start; gap: 6px; min-height: 108px; padding: 16px;
+      border: 2px solid var(--navy); border-radius: 8px; background: var(--card-paper);
+      box-shadow: 0 4px 12px rgba(34, 55, 90, .09); text-align: left; cursor: pointer;
+    }
+    .feature-button:hover, .feature-button:focus-visible { background: rgba(233, 185, 73, .2); }
+    .feature-button strong { color: var(--ink); font-size: 1rem; font-weight: 700; }
+    .feature-button span { color: var(--deep-blue); font-size: .82rem; }
+    .schedule-preview-toggle { margin: 12px 0; }
+    .schedule-preview {
+      display: grid; gap: 12px; margin-top: 10px; padding: 14px;
+      border: 2px solid var(--brown); border-radius: 8px; background: rgba(199, 163, 126, .14);
+    }
+    .schedule-preview[hidden] { display: none; }
+    .masthead {
+      position: relative; margin-top: 24px; padding: 24px 30px 30px;
+      border: 2px solid var(--brown); border-radius: 12px;
+      background: var(--card-paper); box-shadow: var(--paper-shadow);
+      text-align: center;
+      isolation: isolate;
+    }
+    .masthead-top, .section-heading, .footer-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .masthead-top { flex-direction: column; justify-content: center; gap: 12px; }
+    .account-bar { justify-content: center; flex-wrap: wrap; }
+    .theatre-name { display: flex; align-items: center; justify-content: center; gap: 10px; color: var(--deep-blue); font-family: Georgia, var(--font-family); font-size: .9rem; letter-spacing: .15em; }
+    .theatre-name::after {
+      width: 21px; height: 19px; background: url("./assets/sticker-bow-red.png") center / contain no-repeat;
+      content: ""; opacity: .64;
+    }
+    .theatre-logo {
+      width: 54px; height: 54px; border: 2px solid var(--brown); border-radius: 50%;
+      background: var(--card-paper); object-fit: cover; box-shadow: 0 3px 10px rgba(34, 55, 90, .14);
+    }
+    .edition { color: var(--deep-blue); font-family: Georgia, var(--font-family); font-size: .78rem; letter-spacing: .11em; }
+    h1, h2, h3 { color: var(--navy); font-family: var(--heading-family); font-weight: 900; }
+    h1 { margin: 12px 0 0; font-size: clamp(2.2rem, 5vw, 3.5rem); letter-spacing: .12em; line-height: 1.2; }
+    h1 span { color: var(--red); }
+    .masthead h1::before, .masthead h1::after {
+      display: inline-block; width: 16px; height: 26px; vertical-align: .28em;
+      background-position: center; background-size: contain; background-repeat: no-repeat; content: ""; opacity: .62;
+    }
+    .masthead h1::before { margin-right: .55em; background-image: url("./assets/sticker-diamond-red.png"); }
+    .masthead h1::after { margin-left: .55em; background-image: url("./assets/sticker-diamond-navy.png"); }
+    .date-range {
+      display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 9px;
+      margin: 16px auto 0;
+      color: var(--deep-blue); font-size: .82rem;
+    }
+    .date-field { display: inline-flex; align-items: center; gap: 7px; }
+    .date-range input[type="date"] {
+      padding: 6px 8px; border: 2px solid var(--navy); border-radius: 6px;
+      background: var(--card-paper); color: var(--ink);
+    }
+    .range-error { width: 100%; color: var(--red); font-size: .8rem; }
+    main { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; min-width: 0; padding: 26px 0 36px; }
+    .feature-toolbar:not([hidden]) + main { padding-top: 0; }
+    main > section { width: 100%; min-width: 0; }
+    .control-card, .schedule-card, .people-card, .availability-card {
+      border: 2px solid var(--navy); border-radius: 10px; background: var(--card-paper); box-shadow: var(--paper-shadow);
+    }
+    .management-card {
+      margin-top: 0; padding: 18px 12px; border: 0; border-bottom: 1px solid var(--soft-line);
+      border-radius: 0; background: transparent; box-shadow: none;
+    }
+    .management-card:last-child { border-bottom: 0; }
+    .control-card { padding: 19px 22px; }
+    .section-kicker {
+      width: max-content; min-height: 28px; margin: 0 0 5px; padding: 5px 14px;
+      background: url("./assets/sticker-label-oval.png") center / 100% 100% no-repeat;
+      color: var(--paper); font-family: Georgia, var(--font-family); font-size: .62rem; letter-spacing: .08em;
+      line-height: 18px; text-transform: uppercase;
+    }
+    h2 { margin: 0; font-size: 1.18rem; letter-spacing: .06em; }
+    h3 { margin: 0; font-size: .98rem; letter-spacing: .04em; }
+    main h2::before, .feature-toolbar h2::before {
+      display: inline-block; width: 16px; height: 22px; margin-right: 8px;
+      background: url("./assets/sticker-star-red.png") center / contain no-repeat; content: ""; vertical-align: -.16em;
+    }
+    main h2::after, .feature-toolbar h2::after {
+      display: inline-block; width: 14px; height: 20px; margin-left: 7px;
+      background: url("./assets/sticker-star-gold.png") center / contain no-repeat; content: ""; vertical-align: -.12em;
+    }
+    .management-card h3::before, .management-card h3::after {
+      display: inline-block; width: 14px; height: 20px; background-position: center;
+      background-size: contain; background-repeat: no-repeat; content: ""; vertical-align: -.18em;
+    }
+    .management-card h3::before { margin-right: 8px; background-image: url("./assets/sticker-star-red.png"); }
+    .management-card h3::after { margin-left: 8px; background-image: url("./assets/sticker-star-gold.png"); }
+    #assistant-panel h3::before, #assistant-panel h3::after { content: none; }
+    .section-heading { margin-bottom: 14px; }
+    .section-heading .heading-note { color: var(--deep-blue); font-size: .79rem; }
+    .role-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+    .role-tab {
+      min-width: 92px; padding: 8px 15px; border: 2px solid var(--brown); border-radius: 6px;
+      background: transparent; cursor: pointer; transition: background .18s ease, color .18s ease;
+    }
+    .role-tab[aria-selected="true"] { border-color: var(--navy); background: var(--navy); color: var(--paper); }
+    .role-tab:hover:not([aria-selected="true"]) { background: rgba(233, 185, 73, .2); }
+    .identity-row { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    .identity-label { color: var(--deep-blue); font-size: .84rem; }
+    .identity-select {
+      max-width: min(100%, 320px); padding: 7px 31px 7px 10px;
+      border: 2px solid var(--brown); border-radius: 6px; background: var(--card-paper); color: var(--ink);
+    }
+    .permission-owner { color: var(--deep-blue); font-size: .78rem; }
+    .panel { display: none; margin-top: 20px; }
+    .panel.active { display: block; }
+    .schedule-section { margin-top: 0; }
+    .schedule-weeks { display: grid; gap: 20px; }
+    .schedule-card { overflow: hidden; }
+    .week-heading {
+      display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+      padding: 11px 14px; border-bottom: 2px solid var(--deep-blue); background: var(--deep-blue); color: var(--paper);
+    }
+    .week-heading strong { font-size: .95rem; font-weight: 500; letter-spacing: .08em; }
+    .week-heading span { color: var(--paper); font-size: .76rem; }
+    .week-days { display: grid; grid-template-columns: repeat(var(--day-count), minmax(0, 1fr)); }
+    .day-column { min-width: 0; border-right: 2px solid var(--line); }
+    .day-column:last-child { border-right: 0; }
+    .day-column.is-today { box-shadow: inset 0 4px 0 var(--red); }
+    .day-heading {
+      min-height: 48px; padding: 11px 6px; border-bottom: 2px solid var(--deep-blue);
+      background: var(--navy); color: var(--paper); text-align: center; font-size: .82rem;
+    }
+    .schedule-cell {
+      min-height: 105px; padding: 9px; border-bottom: 2px solid var(--line);
+    }
+    .schedule-cell:last-child { border-bottom: 0; }
+    .period-label {
+      display: block; margin-bottom: 7px; padding: 3px 6px;
+      border-radius: 5px; background: rgba(199, 163, 126, .25); color: var(--deep-blue); text-align: center; font-size: .74rem; letter-spacing: .08em;
+    }
+    .blank-field {
+      min-height: 22px; margin: 3px 0 6px; border-radius: 2px; outline: none; cursor: text;
+    }
+    .blank-field:focus { box-shadow: 0 2px 0 var(--red); }
+    .blank-time { display: inline-block; min-width: 70px; padding: 2px 5px; border: 2px solid var(--brown); background: rgba(199, 163, 126, .2); }
+    .blank-time { text-align: center; }
+    .blank-room { min-height: 22px; margin: 4px 0; color: var(--deep-blue); text-align: left; }
+    .blank-room:empty::before { color: var(--deep-blue); content: "排練教室"; }
+    .blank-title, .blank-participants, .blank-note { text-align: left; }
+    .blank-note { min-height: 18px; padding: 3px 5px; border-left: 2px solid var(--brown); color: var(--deep-blue); font-size: .74rem; }
+    .blank-note:empty::before { color: var(--deep-blue); content: "備註（選填）"; }
+    .schedule-empty { padding: 23px; color: var(--deep-blue); text-align: center; font-size: .85rem; }
+    .availability-card, .people-card { margin-top: 0; padding: 18px 20px; }
+    .card-subtitle { margin: 4px 0 14px; color: var(--deep-blue); font-size: .78rem; }
+    .availability-days { display: grid; gap: 12px; }
+    .availability-day {
+      display: grid; grid-template-columns: minmax(145px, .8fr) minmax(250px, 1.6fr);
+      align-items: center; gap: 12px; padding: 10px 11px; border: 1px solid var(--soft-line); border-radius: 7px;
+      background: rgba(255, 251, 241, .48);
+    }
+    .availability-date { color: var(--ink); font-weight: 500; }
+    .availability-date-block { display: grid; gap: 3px; }
+    .availability-status { color: var(--deep-blue); font-size: .69rem; }
+    .availability-day.is-locked { background: rgba(168, 183, 196, .18); color: var(--muted); }
+    .period-choices, .check-label { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+    .period-choices { gap: 7px 16px; }
+    .check-label { color: var(--ink); font-size: .8rem; cursor: pointer; }
+    input[type="checkbox"] { accent-color: var(--red); }
+    .availability-day input[type="checkbox"] { width: 16px; height: 16px; }
+    .private-note, .permission-hint { margin: 12px 0 0; color: var(--deep-blue); font-size: .76rem; }
+    .date-admin-form { display: flex; align-items: end; flex-wrap: wrap; gap: 9px; }
+    .date-admin-form label { display: grid; gap: 4px; color: var(--deep-blue); font-size: .77rem; }
+    .date-admin-form input[type="date"], .date-admin-form select {
+      padding: 6px 8px; border: 2px solid var(--brown); border-radius: 5px;
+      background: var(--card-paper); color: var(--ink);
+    }
+    .admin-list { display: grid; gap: 7px; margin-top: 11px; }
+    .admin-list-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      padding: 8px 10px; border: 1px solid rgba(233, 185, 73, .72); border-left-width: 4px;
+      border-radius: 6px; background: rgba(233, 185, 73, .1); font-size: .8rem;
+    }
+    .date-status-list { display: grid; gap: 7px; }
+    .date-status-row {
+      display: grid; grid-template-columns: 1fr minmax(180px, .7fr);
+      align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--soft-line); border-radius: 6px;
+      background: rgba(255, 251, 241, .48);
+    }
+    .date-status-row select {
+      width: 100%; padding: 6px; border: 2px solid var(--brown); border-radius: 5px;
+      background: var(--card-paper); color: var(--ink);
+    }
+    .export-row { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+    .export-range { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
+    .export-range label { display: grid; min-width: 0; gap: 4px; color: var(--deep-blue); font-size: .77rem; }
+    .export-range input[type="date"] {
+      width: 100%; min-width: 0; padding: 6px 8px; border: 2px solid var(--brown); border-radius: 5px;
+      background: var(--card-paper); color: var(--ink);
+    }
+    .admin-message { min-height: 1.4em; margin: 8px 0 0; color: var(--red); font-size: .76rem; }
+    .private-note strong { color: var(--red); }
+    .cast-list, .assistant-groups, .overview-list { display: grid; gap: 10px; }
+    .cast-row, .assistant-position, .overview-row {
+      display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+      align-items: center; gap: 12px; padding: 10px 12px; border: 1px solid var(--soft-line); border-radius: 7px;
+      background: rgba(255, 251, 241, .48);
+    }
+    .cast-role { min-width: 0; overflow-wrap: anywhere; color: var(--ink); font-weight: 500; }
+    .cast-input, .assistant-name {
+      width: 100%; min-width: 0; padding: 6px 8px; border: 2px solid var(--brown);
+      border-radius: 5px; background: var(--card-paper); color: var(--ink);
+    }
+    .cast-input::placeholder, .assistant-name::placeholder { color: rgba(30, 43, 71, .68); }
+    .assistant-position { grid-template-columns: minmax(160px, .8fr) minmax(220px, 1.4fr); }
+    .assistant-position.read-only { border-color: var(--muted); }
+    .position-heading { display: grid; gap: 2px; }
+    .position-heading span { color: var(--deep-blue); font-size: .72rem; }
+    .assistant-list { display: grid; gap: 7px; }
+    .assistant-entry { display: grid; grid-template-columns: minmax(120px, 1fr) minmax(140px, .8fr) auto; align-items: center; gap: 7px; }
+    .assistant-entry select {
+      width: 100%; min-width: 0; padding: 6px; border: 2px solid var(--brown); border-radius: 5px;
+      background: var(--card-paper); color: var(--ink); font: inherit; font-size: .76rem;
+    }
+    .small-button, .primary-button {
+      padding: 6px 11px; border: 2px solid var(--navy); border-radius: 6px;
+      background: var(--card-paper); color: var(--navy); cursor: pointer;
+    }
+    .small-button:hover { background: rgba(233, 185, 73, .2); }
+    .remove-button { border-color: var(--brown); color: var(--deep-blue); }
+    .primary-button { border-color: var(--red); border-radius: 7px; background: var(--red); color: var(--paper); }
+    .primary-button:hover, .primary-button:focus-visible {
+      border-color: var(--yellow); background: #9F3229; box-shadow: 0 0 0 3px rgba(233, 185, 73, .28);
+    }
+    .save-status {
+      width: fit-content; margin: 10px 0 14px; padding: 5px 10px; border: 2px solid var(--yellow);
+      border-radius: 6px; background: rgba(233, 185, 73, .2); color: var(--deep-blue); font-size: .78rem;
+    }
+    .availability-status {
+      width: fit-content; padding: 2px 7px; border: 1px solid rgba(233, 185, 73, .8);
+      border-radius: 999px; background: rgba(233, 185, 73, .2); color: var(--deep-blue);
+    }
+    .availability-day.is-locked .availability-status {
+      border-color: rgba(168, 183, 196, .7); background: rgba(168, 183, 196, .18); color: var(--deep-blue);
+    }
+    .save-status[data-state="error"] { border-color: var(--red); color: var(--red); }
+    .overview-row { display: block; }
+    .overview-row summary { cursor: pointer; font-weight: 500; }
+    .overview-row .availability-days { margin-top: 10px; }
+    .overview-row .availability-day { grid-template-columns: minmax(125px, .7fr) 1fr; padding: 7px 9px; }
+    .empty-state { padding: 12px 0; color: var(--deep-blue); font-size: .82rem; }
+    .people-card { display: grid; grid-template-columns: 1fr 1.8fr; gap: 22px; }
+    .people-description { margin: 4px 0 0; color: var(--deep-blue); font-size: .78rem; }
+    .people-list { display: flex; align-content: flex-start; flex-wrap: wrap; gap: 7px; }
+    .people-chip { padding: 5px 10px; border: 2px solid var(--brown); border-radius: 999px; background: rgba(199, 163, 126, .2); color: var(--deep-blue); font-size: .79rem; }
+    .footer-row { align-items: flex-start; margin-bottom: 20px; padding: 18px 20px 26px; border-top: 2px solid var(--red); border-radius: 0 0 10px 10px; background: transparent; color: var(--deep-blue); font-size: .76rem; }
+    .footer-row::after {
+      align-self: center; width: 30px; height: 30px;
+      background: url("./assets/sticker-sunburst-navy.png") center / contain no-repeat;
+      content: ""; opacity: .55;
+    }
+    .footer-row p { max-width: 830px; margin: 0; }
+    .footer-seal { color: var(--red); letter-spacing: .1em; white-space: nowrap; }
+    .footer-seal img { width: 24px; height: 24px; margin-right: 6px; border: 1px solid var(--brown); border-radius: 50%; vertical-align: middle; object-fit: cover; }
+    .sync-status { margin-left: auto; align-self: center; font-size: .72rem; letter-spacing: .04em; white-space: nowrap; }
+    .sync-status[data-state="online"] { color: var(--navy); }
+    .sync-status[data-state="offline"] { color: var(--red); }
+    .sync-status[data-state="connecting"] { color: var(--muted); }
+    @keyframes page-reveal { from { opacity: 0; } to { opacity: 1; } }
+    .feature-toolbar:not([hidden]), main > section:not([hidden]) { animation: page-reveal .18s ease-out both; }
+    [hidden] { display: none !important; }
+    @media (min-width: 1000px) {
+      .panel.active#core-panel { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+      .panel.active#core-panel > .management-card { min-width: 0; margin-top: 0; }
+      #assistant-panel, #cast-panel { grid-column: 1 / -1; }
+    }
+    @media (max-width: 999px) {
+      .week-days { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 760px) {
+      body { overflow-x: clip; }
+      .page { width: min(100% - 24px, 560px); }
+      .page > *, main > *, .control-card, .management-card, .availability-card, .people-card { min-width: 0; }
+      .masthead { margin-top: 14px; padding: 20px 18px 18px; }
+      .edition { font-size: .67rem; }
+      .date-range { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); justify-items: center; gap: 8px; }
+      .date-field { display: grid; min-width: 0; gap: 4px; }
+      .date-range input[type="date"] { width: 100%; min-width: 0; }
+      .masthead-top { align-items: center; }
+      .account-bar { flex-direction: row; align-items: center; justify-content: center; }
+      .date-range > span:first-of-type { display: none; }
+      .date-range > span:nth-of-type(2) { grid-column: 1 / -1; }
+      .date-range .check-label { grid-column: 1 / -1; min-height: 44px; }
+      .date-range .range-error { grid-column: 1 / -1; }
+      .feature-toolbar { align-items: stretch; }
+      .feature-toolbar .small-button { flex: 0 0 auto; }
+      .feature-home { padding: 16px; }
+      .feature-grid { grid-template-columns: minmax(0, 1fr); }
+      .feature-button { min-height: 76px; }
+      input, select, .small-button, .primary-button, .role-tab { min-height: 44px; }
+      .control-card { padding: 16px; }
+      .section-heading { align-items: flex-start; flex-direction: column; gap: 9px; }
+      .panel.active#core-panel { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+      .panel.active#core-panel > .management-card { min-width: 0; margin-top: 0; }
+      #assistant-panel, #cast-panel { grid-column: auto; }
+      .week-days { grid-template-columns: minmax(0, 1fr); }
+      .day-column { border-right: 0; }
+      .day-column { border-bottom: 2px solid var(--brown); }
+      .day-column:last-child { border-bottom: 0; }
+      .schedule-cell { min-height: 94px; padding: 8px; }
+      .availability-card, .management-card, .people-card { padding: 15px; }
+      .availability-day, .cast-row, .assistant-position { grid-template-columns: 1fr; }
+      .people-card { grid-template-columns: 1fr; gap: 13px; }
+      .footer-row { flex-direction: column; gap: 9px; }
+      .date-admin-form { grid-template-columns: minmax(0, 1fr); }
+      .assistant-entry { grid-template-columns: minmax(0, 1fr); }
+      .export-row { align-items: stretch; flex-direction: column; }
+      .export-row .primary-button { width: 100%; white-space: normal; }
+      .theatre-name { min-width: 0; letter-spacing: .08em; }
+      .theatre-logo { flex: 0 0 auto; }
+      .entry-screen { padding: 16px; }
+      .entry-card { padding: 21px 8px; }
+      .entry-brand { font-size: .9rem; }
+      h1, .entry-card h1 { font-size: 2rem; }
+      .entry-description { font-size: .78rem; }
+      .entry-field { font-size: .76rem; }
+      .entry-field select, .entry-field input, .entry-card .primary-button { font-size: .9rem; }
+      .entry-message { font-size: .74rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <section class="entry-screen" id="entry-screen" aria-labelledby="entry-title">
+    <div class="entry-card">
+      <div class="entry-brand"><img src="./asobou-logo.jpg" alt="">Asobou 劇團</div>
+      <h1 id="entry-title">排練<span>班表</span></h1>
+      <p class="entry-description">請先選擇身分，進入排練班表功能選單。</p>
+      <label class="entry-field" for="entry-role">
+        <span>選擇身分</span>
+        <select id="entry-role">
+          <option value="actor">演員</option>
+          <option value="core">組頭</option>
+          <option value="assistant">助理</option>
+        </select>
+      </label>
+      <div id="entry-identity-fields"></div>
+      <p class="entry-message" id="entry-message" role="alert"></p>
+      <button class="primary-button" id="entry-submit" type="button">進入班表</button>
+    </div>
+  </section>
+
+  <div class="page" id="app-shell" hidden>
+    <header class="masthead">
+      <div class="masthead-top">
+        <div class="theatre-name"><img class="theatre-logo" src="./asobou-logo.jpg" alt="Asobou 劇團手繪劇場標誌">Asobou 劇團</div>
+        <div class="account-bar">
+          <div class="edition">排練手帳　・　內部使用</div>
+          <span class="account-name" id="active-identity" hidden></span>
+          <button class="small-button" id="logout-button" type="button" hidden>登出</button>
+        </div>
+      </div>
+      <h1>排練<span>班表</span></h1>
+      <div class="date-range" id="date-range" aria-label="排練日期區間">
+        <label class="date-field" for="start-date">起始日
+          <input id="start-date" type="date" value="2026-10-26">
+        </label>
+        <span>～</span>
+        <label class="date-field" for="end-date">結束日
+          <input id="end-date" type="date" value="2026-11-06">
+        </label>
+        <label class="check-label"><input id="show-saturday" type="checkbox" checked> 顯示週六</label>
+        <span>週日自動略過</span>
+        <span class="range-error" id="range-error" role="alert" hidden></span>
+      </div>
+    </header>
+    <div class="feature-toolbar" id="feature-toolbar" hidden>
+      <button class="small-button" id="feature-back" type="button">回功能選擇</button>
+      <h2 id="active-feature-title"></h2>
+    </div>
+    <main>
+      <section class="feature-home" id="feature-home" aria-labelledby="feature-home-title" hidden>
+        <p class="section-kicker">Choose a function</p>
+        <h2 id="feature-home-title">請選擇要使用的功能</h2>
+        <div class="feature-grid">
+          <button class="feature-button" type="button" data-feature="management">
+            <strong>管理設定</strong><span>選擇組頭並管理名冊、開放日期與權限</span>
+          </button>
+          <button class="feature-button" type="button" data-feature="availability">
+            <strong>我的可排練時段</strong><span>填寫或修改個人可參與的日期與時段</span>
+          </button>
+          <button class="feature-button" type="button" data-feature="availability-overview">
+            <strong>可排時段全覽</strong><span>查看目前身分權限允許的成員空檔</span>
+          </button>
+          <button class="feature-button" type="button" data-feature="schedule">
+            <strong>排練班表</strong><span>查看各日期與時段的排練安排</span>
+          </button>
+          <button class="feature-button" type="button" data-feature="people">
+            <strong>本劇人員</strong><span>查看目前劇團成員與角色名冊</span>
+          </button>
+          <button class="feature-button" type="button" data-feature="participants-overview">
+            <strong>排練參與者大表</strong><span>依日期查看組頭與演員可參與時段</span>
+          </button>
+        </div>
+      </section>
+      <section class="control-card" id="management-section" aria-labelledby="view-title" hidden>
+        <div class="section-heading">
+          <div><p class="section-kicker">Management settings</p><h2 id="view-title">管理設定</h2></div>
+        </div>
+        <div class="identity-row">
+          <label class="identity-label" for="identity-select">目前成員</label>
+          <select class="identity-select" id="identity-select" aria-label="選擇成員"></select>
+          <span class="permission-owner" id="permission-owner"></span>
+        </div>
+        <section class="panel active" id="actor-panel" aria-label="演員設定">
+          <div class="management-card">
+            <h3>角色與飾演者</h3>
+            <p class="card-subtitle">角色名稱固定；飾演者由組頭維護。</p>
+            <div class="cast-list" id="actor-cast-list"></div>
+          </div>
+        </section>
+        <section class="panel" id="core-panel" aria-label="組頭權限管理">
+          <div class="management-card">
+            <h3>開放可排練時段</h3>
+            <p class="card-subtitle">選擇開放對象與日期區間；演員和助理可分開開放，也可同時開放。</p>
+            <div class="date-admin-form">
+              <label for="open-start">開放起始日<input id="open-start" type="date"></label>
+              <label for="open-end">開放結束日<input id="open-end" type="date"></label>
+              <label for="open-audience">開放對象
+                <select id="open-audience">
+                  <option value="both">演員與助理</option>
+                  <option value="actor">僅演員</option>
+                  <option value="assistant">僅助理</option>
+                </select>
+              </label>
+              <button class="small-button" id="add-open-range" type="button">＋ 開放此區間</button>
+            </div>
+            <div class="admin-list" id="open-ranges-list"></div>
+            <p class="admin-message" id="open-range-message" role="alert"></p>
+          </div>
+          <div class="management-card">
+            <h3>歷史日期與資料匯出</h3>
+            <p class="card-subtitle">匯出可使用自訂日期區間，或快速選擇過去紀錄與全部已知日期；內容包含班表、教室、參與者、成員可排時段及日期狀態。</p>
+            <div class="export-range">
+              <label for="export-start">匯出起日<input id="export-start" type="date"></label>
+              <label for="export-end">匯出訖日<input id="export-end" type="date"></label>
+            </div>
+            <div class="export-row">
+              <button class="primary-button" id="export-custom" type="button">匯出此日期範圍（CSV）</button>
+              <button class="small-button" id="export-history" type="button">快速匯出過去紀錄</button>
+              <button class="small-button" id="export-all" type="button">匯出全部已知日期</button>
+            </div>
+            <p class="permission-hint">自訂範圍會包含起訖日之間的每一天，即使當天沒有填寫資料也會列出。CSV 為 UTF-8 格式，可用 Excel 開啟。</p>
+            <h3>已過日期處理</h3>
+            <div class="date-status-list" id="past-date-status-list"></div>
+            <p class="admin-message" id="export-message" role="status"></p>
+          </div>
+          <div class="management-card" id="assistant-panel">
+            <h3>助理名冊</h3>
+            <p class="card-subtitle">新增或修改助理時，可在姓名旁直接設定可查看範圍；也可由負責組頭移除助理。</p>
+            <div class="assistant-groups" id="assistant-groups"></div>
+          </div>
+          <div class="management-card" id="cast-panel">
+            <h3>演員角色設定</h3>
+            <p class="card-subtitle">填寫或更新每個固定角色的飾演者；清空欄位時會從演員登入名單移除。</p>
+            <div class="cast-list" id="cast-list"></div>
+          </div>
+        </section>
+      </section>
+
+      <section class="availability-card" id="availability-card" aria-labelledby="availability-title" hidden>
+        <p class="section-kicker">Weekly availability</p>
+        <h2 id="availability-title">我的可排練時段</h2>
+        <p class="card-subtitle" id="availability-subtitle">為日期區間中的每一天，分別勾選有空的時段。</p>
+        <p class="save-status" id="availability-save-status" role="status" aria-live="polite" data-state="idle">勾選後會自動儲存</p>
+        <button class="small-button schedule-preview-toggle" id="schedule-preview-toggle" type="button" aria-expanded="false" aria-controls="schedule-preview">
+          查看目前排練班表
+        </button>
+        <div class="schedule-preview" id="schedule-preview" aria-label="目前排練班表預覽" hidden></div>
+        <div class="availability-days" id="availability-days"></div>
+        <p class="private-note"><strong>個人填寫：</strong>演員與助理只能查看自己有權限的空檔；組頭可查看全體回覆。</p>
+      </section>
+
+      <section class="availability-card" id="availability-overview-card" aria-labelledby="overview-title" hidden>
+        <p class="section-kicker">Team availability</p>
+        <h2 id="overview-title">可排練時段全覽</h2>
+        <p class="card-subtitle">僅顯示目前成員依權限可查看的回覆。</p>
+        <div class="overview-list" id="availability-overview"></div>
+      </section>
+
+      <section class="schedule-section" id="schedule-section" aria-labelledby="schedule-title" hidden>
+        <div class="section-heading">
+          <div><p class="section-kicker">Rehearsal schedule</p><h2 id="schedule-title">排練班表</h2></div>
+          <div class="heading-note"><span id="today-mark" hidden>今天有排練　・　</span>組頭可點擊空白欄位填寫</div>
+        </div>
+        <div class="schedule-weeks" id="schedule-weeks"></div>
+      </section>
+
+      <section class="people-card" id="people-section" aria-labelledby="people-title" hidden>
+        <div><p class="section-kicker">Company members</p><h2 id="people-title">本劇人員</h2><p class="people-description" id="people-description"></p></div>
+        <div class="people-list" id="people-list" aria-live="polite"></div>
+      </section>
+
+      <section class="availability-card" id="participants-overview-card" aria-labelledby="participants-overview-title" hidden>
+        <p class="section-kicker">Rehearsal overview</p>
+        <h2 id="participants-overview-title">排練參與者大表</h2>
+        <p class="card-subtitle">所有成員皆可查看；依日期列出排練時間、教室、內容、參與者，以及組頭、演員與已登記助理的可排時段。</p>
+        <div class="overview-table-wrap">
+          <table class="overview-table">
+            <thead id="participants-overview-head"></thead>
+            <tbody id="participants-overview-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+    <footer class="footer-row">
+      <span class="footer-seal"><img src="./asobou-logo.jpg" alt="">Asobou 劇團　・　排練中</span>
+      <span id="sync-status" class="sync-status" data-state="connecting">雲端連線中…</span>
+    </footer>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    (async () => {
+      const SUPABASE_URL = "https://tbajqpidfvpawvcsplrv.supabase.co";
+      const SUPABASE_ANON_KEY = "sb_publishable_xFoaT1CnE_2okwEI8DEPxw_btNAfr0K";
+      const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      const actorRoles = ["陳念", "黃曉安", "母親蔡郁真", "父親陳光榮"];
+      const coreMembers = ["導演", "編劇＋製作", "舞監", "公關", "聲音設計＋燈光", "舞台"];
+      const assistantPositions = [
+        "導演助理", "製作助理", "舞監助理", "公關助理",
+        "聲音設計助理", "燈光助理", "舞台助理"
+      ];
+      const supervisorByPosition = new Map([
+        ["導演助理", "導演"],
+        ["製作助理", "編劇＋製作"],
+        ["舞監助理", "舞監"],
+        ["公關助理", "公關"],
+        ["聲音設計助理", "聲音設計＋燈光"],
+        ["燈光助理", "聲音設計＋燈光"],
+        ["舞台助理", "舞台"]
+      ]);
+      const periods = [
+        { id: "morning", label: "上午" },
+        { id: "noon", label: "中午" },
+        { id: "evening", label: "晚上" }
+      ];
+      const keys = {
+        cast: "asobou-cast-v1",
+        assistants: "asobou-assistants-v1",
+        availability: "asobou-availability-v1",
+        permissions: "asobou-assistant-permissions-v1",
+        schedule: "asobou-actual-schedule-v1",
+        range: "asobou-rehearsal-date-range-v1",
+        openRanges: "asobou-open-availability-ranges-v1",
+        pastStatuses: "asobou-past-date-statuses-v1"
+      };
+      const $ = id => document.getElementById(id);
+      const identitySelect = $("identity-select");
+      const startInput = $("start-date");
+      const endInput = $("end-date");
+      const saturdayInput = $("show-saturday");
+      const entryRole = $("entry-role");
+      const entryFields = $("entry-identity-fields");
+      const dateFormatter = new Intl.DateTimeFormat("zh-Hant", { timeZone: "UTC", month: "2-digit", day: "2-digit" });
+      let currentRole = "";
+      let loggedInIdentity = "";
+      let actorCasting = Object.fromEntries(actorRoles.map(role => [role, ""]));
+      let assistants = Object.fromEntries(assistantPositions.map(position => [position, []]));
+      let availability = {};
+      let permissions = {};
+      let actualSchedule = {};
+      let openRanges = [];
+      let pastDateStatuses = {};
+      let dateRange = { start: "2026-10-26", end: "2026-11-06", showSaturday: true };
+      let activeFeature = "home";
+      const featureTitles = {
+        management: "管理設定",
+        availability: "我的可排練時段",
+        "availability-overview": "可排時段全覽",
+        schedule: "排練班表",
+        people: "本劇人員",
+        "participants-overview": "排練參與者大表"
+      };
+
+      const readStored = (key, fallback) => {
+        try {
+          const saved = localStorage.getItem(key);
+          return saved === null ? fallback : JSON.parse(saved);
+        } catch (error) {
+          console.error(`無法讀取 ${key}。`, error);
+          return fallback;
+        }
+      };
+      const isRecord = value => value !== null && typeof value === "object" && !Array.isArray(value);
+      const writeLocal = (key, value) => {
+        try {
+          localStorage.setItem(key, JSON.stringify(value));
+          return true;
+        } catch (error) {
+          console.error(`無法儲存 ${key}。`, error);
+          return false;
+        }
+      };
+      function setSyncStatus(ok, message = "") {
+        const el = $("sync-status");
+        if (!el) return;
+        el.dataset.state = ok ? "online" : "offline";
+        el.textContent = ok ? "雲端已連線" : "雲端未連線（僅存本機）";
+        if (message) el.textContent += `：${message}`;
+      }
+      const saveStored = (key, value) => {
+        const localOk = writeLocal(key, value);
+        if (key === keys.availability) return localOk;
+        supabase.from("app_data").upsert({ key, value }, { onConflict: "key" })
+          .then(({ error }) => {
+            if (error) {
+              console.error(`雲端同步 ${key} 失敗。`, error.message);
+              setSyncStatus(false, `同步 ${key} 失敗`);
+            } else {
+              setSyncStatus(true);
+            }
+          })
+          .catch(error => {
+            console.error(`雲端同步 ${key} 失敗。`, error);
+            setSyncStatus(false, `同步 ${key} 失敗`);
+          });
+        return localOk;
+      };
+      const makeId = () => globalThis.crypto?.randomUUID
+        ? globalThis.crypto.randomUUID()
+        : `assistant-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+
+      async function loadState() {
+        // 先從雲端拉取全部資料，寫入本機快取（雲端為主）
+        try {
+          const [{ data: appRows, error: appError }, { data: availRows, error: availError }] = await Promise.all([
+            supabase.from("app_data").select("*"),
+            supabase.from("availability").select("*")
+          ]);
+          if (!appError && !availError) {
+            const appData = {};
+            (appRows || []).forEach(row => { appData[row.key] = row.value; });
+            const availData = {};
+            (availRows || []).forEach(row => { if (row.person_id) availData[row.person_id] = row.data; });
+            Object.entries(appData).forEach(([key, value]) => writeLocal(key, value));
+            writeLocal(keys.availability, availData);
+            setSyncStatus(true);
+          } else {
+            setSyncStatus(false);
+          }
+        } catch (error) {
+          console.error("雲端載入失敗，改用本機資料。", error);
+          setSyncStatus(false);
+        }
+        const savedCastValue = readStored(keys.cast, {});
+        const savedCast = isRecord(savedCastValue) ? savedCastValue : {};
+        actorCasting = Object.fromEntries(actorRoles.map(role => [role, typeof savedCast[role] === "string" ? savedCast[role] : ""]));
+        const savedAssistantsValue = readStored(keys.assistants, {});
+        const savedAssistants = isRecord(savedAssistantsValue) ? savedAssistantsValue : {};
+        assistants = Object.fromEntries(assistantPositions.map(position => [
+          position,
+          Array.isArray(savedAssistants[position])
+            ? savedAssistants[position].filter(entry => entry && typeof entry.id === "string").map(entry => ({ id: entry.id, name: typeof entry.name === "string" ? entry.name : "" }))
+            : []
+        ]));
+        const savedAvailability = readStored(keys.availability, {});
+        availability = isRecord(savedAvailability) ? savedAvailability : {};
+        const savedPermissions = readStored(keys.permissions, {});
+        permissions = isRecord(savedPermissions) ? savedPermissions : {};
+        const savedSchedule = readStored(keys.schedule, {});
+        actualSchedule = isRecord(savedSchedule) ? savedSchedule : {};
+        const savedOpenRanges = readStored(keys.openRanges, []);
+        openRanges = Array.isArray(savedOpenRanges)
+          ? savedOpenRanges.filter(range => range && typeof range.id === "string" && typeof range.start === "string" && typeof range.end === "string")
+              .map(range => ({
+                ...range,
+                audience: ["actor", "assistant", "both"].includes(range.audience) ? range.audience : "both"
+              }))
+            : [];
+        const savedPastStatuses = readStored(keys.pastStatuses, {});
+        pastDateStatuses = isRecord(savedPastStatuses) ? savedPastStatuses : {};
+        dateRange = readStored(keys.range, dateRange);
+        if (!dateRange || typeof dateRange.start !== "string" || typeof dateRange.end !== "string") {
+          dateRange = { start: "2026-10-26", end: "2026-11-06", showSaturday: true };
+        }
+        startInput.value = dateRange.start;
+        endInput.value = dateRange.end;
+        $("export-start").value = dateRange.start;
+        $("export-end").value = dateRange.end;
+        saturdayInput.checked = dateRange.showSaturday !== false;
+        $("open-start").value = dateRange.start;
+        $("open-end").value = dateRange.end;
+      }
+
+      function assistantId(id) { return `assistant:${id}`; }
+      function currentIdentity() { return identitySelect.value; }
+      function currentAssistant() {
+        if (currentRole !== "assistant") return null;
+        for (const position of assistantPositions) {
+          const found = assistants[position].find(entry => assistantId(entry.id) === currentIdentity());
+          if (found) return { ...found, position };
+        }
+        return null;
+      }
+      function allPeople() {
+        return [
+          ...actorRoles.filter(roleName => actorCasting[roleName].trim()).map(roleName => ({
+            id: `actor:${roleName}`, name: actorCasting[roleName].trim(), role: "actor", group: "演員", position: roleName
+          })),
+          ...coreMembers.map(name => ({ id: `core:${name}`, name, role: "core", group: "組頭" })),
+          ...assistantPositions.flatMap(position => assistants[position]
+            .filter(entry => entry.name.trim())
+            .map(entry => ({
+              id: assistantId(entry.id), name: entry.name.trim(), role: "assistant", group: position, position
+            })))
+        ];
+      }
+      function selectedPerson() { return allPeople().find(person => person.id === currentIdentity()); }
+
+      function renderIdentity() {
+        const oldValue = identitySelect.value;
+        const people = currentRole === "actor"
+          ? actorRoles.filter(role => actorCasting[role].trim()).map(role => ({
+              id: `actor:${role}`, name: actorCasting[role].trim(), detail: role
+            }))
+          : currentRole === "core"
+            ? coreMembers.map(name => ({ id: `core:${name}`, name, detail: "" }))
+            : assistantPositions.flatMap(position => assistants[position].map(entry => ({
+                id: assistantId(entry.id), name: entry.name.trim() || "待填姓名", detail: position
+              })));
+        identitySelect.replaceChildren();
+        people.forEach(person => {
+          const option = document.createElement("option");
+          option.value = person.id;
+          option.textContent = person.detail ? `${person.name}（${person.detail}）` : person.name;
+          identitySelect.append(option);
+        });
+        const preferredIdentity = currentRole === "core"
+          ? (people.some(person => person.id === oldValue) ? oldValue : loggedInIdentity)
+          : loggedInIdentity;
+        if (people.some(person => person.id === preferredIdentity)) identitySelect.value = preferredIdentity;
+        identitySelect.disabled = currentRole !== "core";
+        $("identity-select").hidden = currentRole === "actor" || currentRole === "assistant";
+        $("identity-select").previousElementSibling.hidden = currentRole === "actor" || currentRole === "assistant";
+        $("logout-button").hidden = false;
+        $("permission-owner").textContent = currentRole === "assistant"
+          ? `權限負責人：${supervisorByPosition.get(currentAssistant()?.position) || "尚無"}`
+          : currentRole === "actor"
+            ? `演員：${selectedPerson()?.name || ""}`
+            : "組頭管理視圖";
+      }
+
+      function renderCast() {
+        const container = $("cast-list");
+        container.replaceChildren();
+        const actorContainer = $("actor-cast-list");
+        actorContainer.replaceChildren();
+        actorRoles.forEach(role => {
+          const displayRow = document.createElement("div");
+          displayRow.className = "cast-row";
+          const displayRole = document.createElement("span");
+          displayRole.className = "cast-role";
+          displayRole.textContent = role;
+          const displayPerformer = document.createElement("span");
+          displayPerformer.className = "casting-display";
+          displayPerformer.textContent = actorCasting[role].trim() || "待確認";
+          displayRow.append(displayRole, displayPerformer);
+          actorContainer.append(displayRow);
+
+          const row = document.createElement("label");
+          row.className = "cast-row";
+          const roleName = document.createElement("span");
+          roleName.className = "cast-role";
+          roleName.textContent = role;
+          const input = document.createElement("input");
+          input.className = "cast-input";
+          input.type = "text";
+          input.value = actorCasting[role];
+          input.placeholder = "待確認";
+          input.setAttribute("aria-label", `${role}的飾演者`);
+          input.addEventListener("input", () => {
+            actorCasting[role] = input.value;
+            saveStored(keys.cast, actorCasting);
+            renderIdentity();
+            renderPeople();
+            renderParticipantsOverview();
+          });
+          row.append(roleName, input);
+          container.append(row);
+        });
+      }
+
+      function renderAssistantManagement() {
+        const container = $("assistant-groups");
+        container.replaceChildren();
+        const currentCoreMember = currentRole === "core" ? identitySelect.value.replace(/^core:/, "") : "";
+        assistantPositions.forEach(position => {
+          const canManage = supervisorByPosition.get(position) === currentCoreMember;
+          const row = document.createElement("section");
+          row.className = `assistant-position${canManage ? "" : " read-only"}`;
+          const header = document.createElement("div");
+          header.className = "position-heading";
+          const title = document.createElement("h3");
+          title.textContent = position;
+          const supervisor = document.createElement("span");
+          supervisor.textContent = `負責人：${supervisorByPosition.get(position)}`;
+          header.append(title, supervisor);
+          const list = document.createElement("div");
+          list.className = "assistant-list";
+          assistants[position].forEach(entry => {
+            const entryRow = document.createElement("div");
+            entryRow.className = "assistant-entry";
+            const nameInput = document.createElement("input");
+            nameInput.className = "assistant-name";
+            nameInput.type = "text";
+            nameInput.value = entry.name;
+            nameInput.placeholder = "助理姓名";
+            nameInput.disabled = !canManage;
+            nameInput.setAttribute("aria-label", `${position}姓名`);
+            const permissionSelect = document.createElement("select");
+            permissionSelect.setAttribute("aria-label", `${entry.name.trim() || position}可查看範圍`);
+            [
+              ["own", "只看自己的空檔"],
+              ["position", "看同職位全體"],
+              ["all", "看全部班表"]
+            ].forEach(([value, label]) => {
+              const option = document.createElement("option");
+              option.value = value;
+              option.textContent = label;
+              permissionSelect.append(option);
+            });
+            permissionSelect.value = permissions[entry.id] || "own";
+            permissionSelect.disabled = !canManage;
+            permissionSelect.addEventListener("change", () => {
+              permissions[entry.id] = permissionSelect.value;
+              saveStored(keys.permissions, permissions);
+              renderOverview();
+              renderFeatureMenu();
+            });
+            nameInput.addEventListener("input", () => {
+              entry.name = nameInput.value;
+              permissionSelect.setAttribute("aria-label", `${entry.name.trim() || position}可查看範圍`);
+              saveStored(keys.assistants, assistants);
+              renderIdentity();
+              renderPeople();
+              renderParticipantsOverview();
+            });
+            const remove = document.createElement("button");
+            remove.type = "button";
+            remove.className = "small-button remove-button";
+            remove.textContent = "刪除";
+            remove.hidden = !canManage;
+            remove.addEventListener("click", async () => {
+              const removedId = assistantId(entry.id);
+              assistants[position] = assistants[position].filter(item => item.id !== entry.id);
+              delete availability[removedId];
+              delete permissions[entry.id];
+              writeLocal(keys.availability, availability);
+              const { error: availError } = await supabase.from("availability").delete().eq("person_id", removedId);
+              if (availError) console.error("雲端刪除該助理可排時段失敗。", availError.message);
+              saveStored(keys.assistants, assistants);
+              saveStored(keys.permissions, permissions);
+              renderIdentity();
+              renderAssistantManagement();
+              renderPeople();
+              renderAvailability();
+              renderOverview();
+              renderParticipantsOverview();
+            });
+            entryRow.append(nameInput, permissionSelect, remove);
+            list.append(entryRow);
+          });
+          const add = document.createElement("button");
+          add.type = "button";
+          add.className = "small-button";
+          add.textContent = "＋ 新增助理";
+          add.hidden = !canManage;
+          add.addEventListener("click", () => {
+            const entry = { id: makeId(), name: "" };
+            assistants[position].push(entry);
+            permissions[entry.id] = "own";
+            saveStored(keys.assistants, assistants);
+            saveStored(keys.permissions, permissions);
+            renderIdentity();
+            renderAssistantManagement();
+            renderPeople();
+            renderParticipantsOverview();
+          });
+          list.append(add);
+          row.append(header, list);
+          container.append(row);
+        });
+      }
+
+      function dateFromISO(iso) {
+        const [year, month, day] = iso.split("-").map(Number);
+        return new Date(Date.UTC(year, month - 1, day, 12));
+      }
+      function isoFromDate(date) {
+        return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, "0")}-${String(date.getUTCDate()).padStart(2, "0")}`;
+      }
+      function displayDate(date) {
+        const dayName = ["日", "一", "二", "三", "四", "五", "六"][date.getUTCDay()];
+        return `${dateFormatter.format(date)}（${dayName}）`;
+      }
+      function getWeeks() {
+        const start = dateFromISO(startInput.value);
+        const end = dateFromISO(endInput.value);
+        const grouped = new Map();
+        const current = new Date(start);
+        while (current <= end) {
+          const weekday = current.getUTCDay();
+          if (weekday !== 0 && (weekday !== 6 || saturdayInput.checked)) {
+            const monday = new Date(current);
+            monday.setUTCDate(monday.getUTCDate() - (weekday - 1));
+            const key = isoFromDate(monday);
+            if (!grouped.has(key)) grouped.set(key, []);
+            grouped.get(key).push({ iso: isoFromDate(current), date: new Date(current), weekday });
+          }
+          current.setUTCDate(current.getUTCDate() + 1);
+        }
+        return [...grouped.values()];
+      }
+      function saveRange() {
+        dateRange = { start: startInput.value, end: endInput.value, showSaturday: saturdayInput.checked };
+        saveStored(keys.range, dateRange);
+      }
+      function todayISO() {
+        const today = new Date();
+        return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+      }
+      function isPastDate(iso) { return iso < todayISO(); }
+      function isOpenDate(iso, role = currentRole) {
+        const audience = role === "actor" || role === "assistant" ? role : "both";
+        return openRanges.some(range =>
+          range.start <= iso && range.end >= iso &&
+          (range.audience === "both" || range.audience === audience)
+        );
+      }
+      function availabilityDateStatus(iso) {
+        if (pastDateStatuses[iso] === "ended") return "已結束・鎖定";
+        if (isPastDate(iso)) return pastDateStatuses[iso] === "keep" ? "已過期・保留紀錄" : "已過期・一般成員不可修改";
+        if (currentRole === "core") {
+          return isOpenDate(iso, "actor") || isOpenDate(iso, "assistant") ? "已開放其中一種身分" : "尚未開放";
+        }
+        return isOpenDate(iso) ? "開放填寫中" : "尚未開放";
+      }
+
+      function renderOpenRanges() {
+        const list = $("open-ranges-list");
+        list.replaceChildren();
+        if (!openRanges.length) {
+          const empty = document.createElement("p");
+          empty.className = "empty-state";
+          empty.textContent = "目前沒有開放區間；一般成員暫時無法填寫可排練時段。";
+          list.append(empty);
+          return;
+        }
+        openRanges.forEach(range => {
+          const row = document.createElement("div");
+          row.className = "admin-list-row";
+          const label = document.createElement("span");
+          const audienceLabel = range.audience === "actor" ? "僅演員" : range.audience === "assistant" ? "僅助理" : "演員與助理";
+          label.textContent = `${range.start} ～ ${range.end}｜${audienceLabel}`;
+          const remove = document.createElement("button");
+          remove.type = "button";
+          remove.className = "small-button remove-button";
+          remove.textContent = "關閉區間";
+          remove.addEventListener("click", () => {
+            openRanges = openRanges.filter(item => item.id !== range.id);
+            saveStored(keys.openRanges, openRanges);
+            renderOpenRanges();
+            renderAvailability();
+            renderOverview();
+            renderParticipantsOverview();
+          });
+          row.append(label, remove);
+          list.append(row);
+        });
+      }
+
+      function getKnownPastDates() {
+        return getKnownDates().filter(isPastDate);
+      }
+
+      function getKnownDates() {
+        const dates = new Set();
+        if (startInput.value && endInput.value && startInput.value <= endInput.value) {
+          datesInRange(startInput.value, endInput.value).forEach(iso => dates.add(iso));
+        }
+        Object.keys(actualSchedule).forEach(iso => {
+          if (/^\d{4}-\d{2}-\d{2}$/.test(iso)) dates.add(iso);
+        });
+        Object.values(availability).forEach(record => {
+          if (isRecord(record)) Object.keys(record).forEach(iso => {
+            if (/^\d{4}-\d{2}-\d{2}$/.test(iso)) dates.add(iso);
+          });
+        });
+        Object.keys(pastDateStatuses).forEach(iso => {
+          if (/^\d{4}-\d{2}-\d{2}$/.test(iso)) dates.add(iso);
+        });
+        return [...dates].sort();
+      }
+
+      function renderPastDateStatuses() {
+        const list = $("past-date-status-list");
+        list.replaceChildren();
+        const dates = getKnownPastDates();
+        if (!dates.length) {
+          const empty = document.createElement("p");
+          empty.className = "empty-state";
+          empty.textContent = "目前沒有已過日期。日期經過後會出現在這裡管理。";
+          list.append(empty);
+          return;
+        }
+        dates.forEach(iso => {
+          const row = document.createElement("label");
+          row.className = "date-status-row";
+          const date = document.createElement("span");
+          date.textContent = displayDate(dateFromISO(iso));
+          const select = document.createElement("select");
+          select.setAttribute("aria-label", `${iso}的過去日期處理方式`);
+          [
+            ["keep", "保留歷史紀錄"],
+            ["ended", "結束／不再需要（鎖定）"]
+          ].forEach(([value, text]) => {
+            const option = document.createElement("option");
+            option.value = value;
+            option.textContent = text;
+            select.append(option);
+          });
+          select.value = pastDateStatuses[iso] === "ended" ? "ended" : "keep";
+          select.addEventListener("change", () => {
+            pastDateStatuses[iso] = select.value;
+            saveStored(keys.pastStatuses, pastDateStatuses);
+            renderAvailability();
+            renderOverview();
+          });
+          row.append(date, select);
+          list.append(row);
+        });
+      }
+
+      function datesInRange(start, end) {
+        const dates = [];
+        const date = dateFromISO(start);
+        const lastDate = dateFromISO(end);
+        while (date <= lastDate) {
+          dates.push(`${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, "0")}-${String(date.getUTCDate()).padStart(2, "0")}`);
+          date.setUTCDate(date.getUTCDate() + 1);
+        }
+        return dates;
+      }
+
+      function setExportRangeFromDates(dates) {
+        if (!dates.length) return false;
+        $("export-start").value = dates[0];
+        $("export-end").value = dates[dates.length - 1];
+        return true;
+      }
+
+      function exportRecords(start, end, exportType) {
+        const message = $("export-message");
+        if (!start || !end || start > end) {
+          message.textContent = "請輸入有效的匯出日期範圍，訖日需晚於或等於起日。";
+          return;
+        }
+        const dates = datesInRange(start, end);
+        const people = allPeople();
+        const rows = [[
+          "日期", "成員", "身分／職位", "可排練時段", "排練時段", "排練時間", "排練教室", "排練內容", "參與者", "備註", "日期狀態"
+        ]];
+        dates.forEach(iso => {
+          const daySchedule = isRecord(actualSchedule[iso]) ? actualSchedule[iso] : {};
+          const scheduleItems = periods.map(period => ({
+            period,
+            item: isRecord(daySchedule[period.id]) ? daySchedule[period.id] : {}
+          }));
+          const status = pastDateStatuses[iso] === "ended"
+            ? "結束／不再需要"
+            : isPastDate(iso) ? "保留歷史紀錄" : "尚未標記";
+          const peopleWithRecords = people.filter(person => {
+            const record = availability[person.id];
+            return isRecord(record) && Array.isArray(record[iso]) && record[iso].length > 0;
+          });
+          peopleWithRecords.forEach(person => {
+            const record = availability[person.id][iso];
+            const role = person.role === "assistant" ? person.position : person.role === "actor" ? person.position : "組頭";
+            rows.push([
+              displayDate(dateFromISO(iso)),
+              person.name,
+              role,
+              periods.filter(period => record.includes(period.id)).map(period => period.label).join("、"),
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              status
+            ]);
+          });
+          scheduleItems.forEach(({ period, item }) => {
+            const hasRecord = [item.time, item.room, item.title, item.participants, item.note]
+              .some(value => typeof value === "string" && value.trim());
+            if (!hasRecord) return;
+            rows.push([
+              displayDate(dateFromISO(iso)), "", "實際排練", "", period.label,
+              item.time || "", item.room || "", item.title || "", item.participants || "", item.note || "", status
+            ]);
+          });
+          if (!peopleWithRecords.length && !scheduleItems.some(({ item }) =>
+            [item.time, item.room, item.title, item.participants, item.note].some(value => typeof value === "string" && value.trim())
+          )) {
+            rows.push([displayDate(dateFromISO(iso)), "", "", "", "", "", "", "", "", "", status]);
+          }
+        });
+        const csvCell = value => {
+          let text = String(value ?? "");
+          if (/^[=+\-@\t\r]/.test(text)) text = `'${text}`;
+          return `"${text.replace(/"/g, '""')}"`;
+        };
+        const csv = "\uFEFF" + rows.map(row => row.map(csvCell).join(",")).join("\r\n");
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `Asobou-排練紀錄-${start}-至-${end}-${exportType}-${todayISO()}.csv`;
+        document.body.append(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        message.textContent = `已匯出 ${start} 至 ${end}，共 ${dates.length} 天、${rows.length - 1} 筆資料列。`;
+      }
+
+      function exportSelectedRange() {
+        exportRecords($("export-start").value, $("export-end").value, "自訂");
+      }
+
+      function exportPastRecords() {
+        const dates = getKnownPastDates();
+        if (!setExportRangeFromDates(dates)) {
+          $("export-message").textContent = "目前沒有已知的過去日期可匯出。";
+          return;
+        }
+        exportSelectedRange();
+      }
+
+      function exportAllRecords() {
+        const dates = getKnownDates();
+        if (!setExportRangeFromDates(dates)) {
+          $("export-message").textContent = "目前沒有已知日期可匯出。";
+          return;
+        }
+        exportRecords($("export-start").value, $("export-end").value, "全部");
+      }
+      function validateRange() {
+        if (!startInput.value || !endInput.value || startInput.value > endInput.value) {
+          $("range-error").hidden = false;
+          $("range-error").textContent = "請確認日期區間，結束日需晚於或等於起始日。";
+          $("schedule-weeks").replaceChildren();
+          $("availability-days").replaceChildren();
+          return false;
+        }
+        $("range-error").hidden = true;
+        $("range-error").textContent = "";
+        return true;
+      }
+
+      async function saveAvailability() {
+        const person = selectedPerson();
+        const record = person && isRecord(availability[person.id]) ? availability[person.id] : {};
+        const localOk = writeLocal(keys.availability, availability);
+        if (!person) return localOk;
+        const { error } = await supabase.from("availability").upsert(
+          { person_id: person.id, data: record },
+          { onConflict: "person_id" }
+        );
+        if (error) {
+          console.error(`雲端同步 ${person.name} 的可排時段失敗。`, error.message);
+          setSyncStatus(false, `同步 ${person.name} 時段失敗`);
+          return false;
+        }
+        setSyncStatus(true);
+        return true;
+      }
+      function setAvailabilitySaveStatus(saved) {
+        const status = $("availability-save-status");
+        status.dataset.state = saved ? "saved" : "error";
+        status.textContent = saved ? "已儲存" : "儲存失敗，請確認瀏覽器儲存空間後再試。";
+      }
+      function createAvailabilityRows(record, readonly = false) {
+        const fragment = document.createDocumentFragment();
+        if (!validateRange()) return fragment;
+        const dates = getWeeks().flat();
+        dates.forEach(entry => {
+          const selectedPeriods = Array.isArray(record[entry.iso])
+            ? record[entry.iso].filter(id => periods.some(period => period.id === id))
+            : [];
+          const status = availabilityDateStatus(entry.iso);
+          const isDateEnded = isPastDate(entry.iso) && pastDateStatuses[entry.iso] === "ended";
+          const isLockedForMember = isDateEnded ||
+            (currentRole !== "core" && (isPastDate(entry.iso) || !isOpenDate(entry.iso, currentRole)));
+          const row = document.createElement("div");
+          row.className = `availability-day${isLockedForMember ? " is-locked" : ""}`;
+          const dateBlock = document.createElement("div");
+          dateBlock.className = "availability-date-block";
+          const dateLabel = document.createElement("span");
+          dateLabel.className = "availability-date";
+          dateLabel.textContent = displayDate(entry.date);
+          const statusLabel = document.createElement("span");
+          statusLabel.className = "availability-status";
+          statusLabel.textContent = status;
+          dateBlock.append(dateLabel, statusLabel);
+          const periodChoices = document.createElement("div");
+          periodChoices.className = "period-choices";
+          periods.forEach(period => {
+            const periodLabel = document.createElement("label");
+            periodLabel.className = "check-label";
+            const periodCheck = document.createElement("input");
+            periodCheck.type = "checkbox";
+            periodCheck.checked = selectedPeriods.includes(period.id);
+            periodCheck.disabled = readonly || isLockedForMember;
+            periodCheck.setAttribute("aria-label", `${displayDate(entry.date)} ${period.label}有空`);
+            periodCheck.addEventListener("change", async () => {
+              const selected = new Set(Array.isArray(record[entry.iso]) ? record[entry.iso] : []);
+              if (periodCheck.checked) selected.add(period.id);
+              else selected.delete(period.id);
+              record[entry.iso] = [...selected];
+              if (!readonly) {
+                setAvailabilitySaveStatus(await saveAvailability());
+                renderOverview();
+                renderParticipantsOverview();
+              }
+            });
+            periodLabel.append(periodCheck, document.createTextNode(period.label));
+            periodChoices.append(periodLabel);
+          });
+          row.append(dateBlock, periodChoices);
+          fragment.append(row);
+        });
+        return fragment;
+      }
+
+      function renderAvailability() {
+        const person = selectedPerson();
+        const container = $("availability-days");
+        container.replaceChildren();
+        if (!person) {
+          const empty = document.createElement("p");
+          empty.className = "empty-state";
+          empty.textContent = currentRole === "assistant" ? "請先在助理名冊新增姓名，再選擇成員。" : "請先選擇成員。";
+          container.append(empty);
+          $("availability-subtitle").textContent = "為日期區間中的每一天，分別勾選有空的時段。";
+          $("availability-save-status").dataset.state = "idle";
+          $("availability-save-status").textContent = "勾選後會自動儲存";
+          return;
+        }
+        const record = isRecord(availability[person.id]) ? availability[person.id] : {};
+        availability[person.id] = record;
+        container.append(createAvailabilityRows(record));
+        $("availability-subtitle").textContent = `${person.name}｜為每個日期獨立勾選上午、中午或晚上；未勾選代表該時段沒有填報空檔。`;
+        const hasSavedPeriods = Object.values(record).some(day => Array.isArray(day) && day.length > 0);
+        $("availability-save-status").dataset.state = hasSavedPeriods ? "saved" : "idle";
+        $("availability-save-status").textContent = hasSavedPeriods ? "已載入已儲存的可排時段" : "勾選後會自動儲存";
+      }
+
+      function hasAvailability(personId) {
+        const record = availability[personId];
+        return isRecord(record) && Object.values(record).some(day => Array.isArray(day) && day.length > 0);
+      }
+      function visibleAvailabilityPeople() {
+        if (currentRole === "core") return allPeople();
+        const selected = selectedPerson();
+        if (!selected) return [];
+        if (selected.role !== "assistant") return [selected];
+        const assistant = currentAssistant();
+        if (!assistant) return [];
+        const scope = permissions[assistant.id] || "own";
+        if (scope === "all") return allPeople();
+        if (scope === "position") return allPeople().filter(person => person.role === "assistant" && person.position === assistant.position);
+        return [selected];
+      }
+      function renderOverview() {
+        const canViewOthers = currentRole === "core" ||
+          (currentRole === "assistant" && ["position", "all"].includes(permissions[currentAssistant()?.id] || "own"));
+        const card = $("availability-overview-card");
+        card.hidden = !canViewOthers;
+        if (!canViewOthers) return;
+        const list = $("availability-overview");
+        list.replaceChildren();
+        const people = visibleAvailabilityPeople();
+        const others = people.filter(person => person.id !== currentIdentity());
+        if (!others.length) {
+          const empty = document.createElement("p");
+          empty.className = "empty-state";
+          empty.textContent = "目前沒有其他成員的空檔回覆。";
+          list.append(empty);
+          return;
+        }
+        others.forEach(person => {
+          const details = document.createElement("details");
+          details.className = "overview-row";
+          const summary = document.createElement("summary");
+          summary.textContent = `${person.name}${person.role === "assistant" ? `（${person.position}）` : ""}`;
+          details.append(summary);
+          if (!hasAvailability(person.id)) {
+            const empty = document.createElement("p");
+            empty.className = "empty-state";
+            empty.textContent = "尚未填寫可排練時段。";
+            details.append(empty);
+          } else {
+            const rows = document.createElement("div");
+            rows.className = "availability-days";
+            rows.append(createAvailabilityRows(availability[person.id] || {}, true));
+            details.append(rows);
+          }
+          list.append(details);
+        });
+      }
+
+      function renderSchedule() {
+        const container = $("schedule-weeks");
+        container.replaceChildren();
+        if (!validateRange()) {
+          renderSchedulePreview();
+          return;
+        }
+        const weeks = getWeeks();
+        const today = new Date();
+        const todayISO = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+        let todayHasRehearsal = false;
+        weeks.forEach((week, weekIndex) => {
+          const card = document.createElement("section");
+          card.className = "schedule-card";
+          const heading = document.createElement("div");
+          heading.className = "week-heading";
+          const headingTitle = document.createElement("strong");
+          headingTitle.textContent = `第 ${weekIndex + 1} 週`;
+          const headingRange = document.createElement("span");
+          headingRange.textContent = `${displayDate(week[0].date)} ～ ${displayDate(week[week.length - 1].date)}`;
+          heading.append(headingTitle, headingRange);
+          const daysGrid = document.createElement("div");
+          daysGrid.className = "week-days";
+          daysGrid.style.setProperty("--day-count", week.length);
+          week.forEach(day => {
+            const column = document.createElement("div");
+            column.className = `day-column${day.iso === todayISO ? " is-today" : ""}`;
+            const dayHeading = document.createElement("div");
+            dayHeading.className = "day-heading";
+            dayHeading.textContent = displayDate(day.date);
+            column.append(dayHeading);
+            periods.forEach(period => {
+              if (!isRecord(actualSchedule[day.iso])) actualSchedule[day.iso] = {};
+              if (!isRecord(actualSchedule[day.iso][period.id])) {
+                actualSchedule[day.iso][period.id] = { time: "", room: "", title: "", participants: "", note: "" };
+              }
+              const item = actualSchedule[day.iso][period.id];
+              ["time", "room", "title", "participants", "note"].forEach(field => {
+                if (typeof item[field] !== "string") item[field] = "";
+              });
+              const cell = document.createElement("div");
+              cell.className = "schedule-cell";
+              const periodLabel = document.createElement("span");
+              periodLabel.className = "period-label";
+              periodLabel.textContent = period.label;
+              cell.append(periodLabel);
+              [
+                ["time", "blank-field blank-time", `${displayDate(day.date)} ${period.label}時間`],
+                ["room", "blank-field blank-room", `${displayDate(day.date)} ${period.label}排練教室`],
+                ["title", "blank-field blank-title", `${displayDate(day.date)} ${period.label}排練內容`],
+                ["participants", "blank-field blank-participants", `${displayDate(day.date)} ${period.label}參與者`],
+                ["note", "blank-field blank-note", `${displayDate(day.date)} ${period.label}備註`]
+              ].forEach(([fieldName, className, ariaLabel]) => {
+                const field = document.createElement("div");
+                field.className = className;
+                field.contentEditable = String(currentRole === "core");
+                field.setAttribute("role", "textbox");
+                field.setAttribute("aria-label", ariaLabel);
+                field.spellcheck = false;
+                field.textContent = item[fieldName] || "";
+                field.addEventListener("input", () => {
+                  item[fieldName] = field.innerText.trim();
+                  saveStored(keys.schedule, actualSchedule);
+                  renderParticipantsOverview();
+                  if (day.iso === todayISO && item.title) {
+                    todayHasRehearsal = true;
+                    $("today-mark").hidden = false;
+                  }
+                });
+                cell.append(field);
+              });
+              if (day.iso === todayISO && item.title) todayHasRehearsal = true;
+              column.append(cell);
+            });
+            daysGrid.append(column);
+          });
+          card.append(heading, daysGrid);
+          container.append(card);
+        });
+        if (!weeks.length) {
+          const empty = document.createElement("div");
+          empty.className = "schedule-card schedule-empty";
+          empty.textContent = "此日期區間沒有可顯示的排練日（週日自動略過）。";
+          container.append(empty);
+        }
+        saveStored(keys.schedule, actualSchedule);
+        $("today-mark").hidden = !todayHasRehearsal;
+        renderSchedulePreview();
+      }
+      function renderSchedulePreview() {
+        const preview = $("schedule-preview");
+        preview.replaceChildren();
+        if (preview.hidden) return;
+        const schedule = $("schedule-weeks");
+        if (!schedule.children.length) {
+          const empty = document.createElement("p");
+          empty.className = "empty-state";
+          empty.textContent = "目前沒有可顯示的排練安排。";
+          preview.append(empty);
+          return;
+        }
+        [...schedule.children].forEach(week => {
+          const copy = week.cloneNode(true);
+          copy.querySelectorAll(".blank-field").forEach(field => {
+            field.contentEditable = "false";
+            field.removeAttribute("role");
+          });
+          preview.append(copy);
+        });
+      }
+
+      function renderPeople() {
+        const list = $("people-list");
+        list.replaceChildren();
+        const description = $("people-description");
+        if (currentRole === "actor") {
+          description.textContent = "演員角色 × 4";
+          actorRoles.forEach(role => {
+            const chip = document.createElement("span");
+            chip.className = "people-chip";
+            chip.textContent = `${role}｜${actorCasting[role].trim() || "待確認"}`;
+            list.append(chip);
+          });
+        } else if (currentRole === "core") {
+          description.textContent = "組頭 × 6";
+          coreMembers.forEach(name => {
+            const chip = document.createElement("span");
+            chip.className = "people-chip";
+            chip.textContent = name;
+            list.append(chip);
+          });
+        } else {
+          const count = assistantPositions.reduce((total, position) => total + assistants[position].length, 0);
+          description.textContent = `助理 × ${count} 人　・　固定職位分類 × ${assistantPositions.length}`;
+          assistantPositions.forEach(position => {
+            const members = assistants[position];
+            const chip = document.createElement("span");
+            chip.className = "people-chip";
+            chip.textContent = `${position}（${members.length}）`;
+            list.append(chip);
+            members.forEach(entry => {
+              const memberChip = document.createElement("span");
+              memberChip.className = "people-chip";
+              memberChip.textContent = `${entry.name.trim() || "待填姓名"}｜${position}`;
+              list.append(memberChip);
+            });
+          });
+        }
+      }
+
+      function renderEntryFields() {
+        const role = entryRole.value;
+        const fields = entryFields;
+        fields.replaceChildren();
+        $("entry-message").textContent = "";
+        if (role === "actor") {
+          const label = document.createElement("label");
+          label.className = "entry-field";
+          label.htmlFor = "entry-actor";
+          const title = document.createElement("span");
+          title.textContent = "選擇自己的飾演者姓名";
+          const select = document.createElement("select");
+          select.id = "entry-actor";
+          select.setAttribute("aria-label", "選擇演員姓名");
+          actorRoles.filter(actorRole => actorCasting[actorRole].trim()).forEach(actorRole => {
+            const option = document.createElement("option");
+            option.value = `actor:${actorRole}`;
+            option.textContent = `${actorCasting[actorRole].trim()}（${actorRole}）`;
+            select.append(option);
+          });
+          if (!select.options.length) {
+            const option = document.createElement("option");
+            option.value = "";
+            option.textContent = "目前尚無已設定飾演者";
+            select.append(option);
+            select.disabled = true;
+          }
+          label.append(title, select);
+          fields.append(label);
+          if (select.disabled) $("entry-message").textContent = "請聯絡組頭先設定角色飾演者。";
+          return;
+        }
+        if (role === "core") {
+          const memberLabel = document.createElement("label");
+          memberLabel.className = "entry-field";
+          memberLabel.htmlFor = "entry-core-member";
+          const memberTitle = document.createElement("span");
+          memberTitle.textContent = "選擇組頭";
+          const memberSelect = document.createElement("select");
+          memberSelect.id = "entry-core-member";
+          coreMembers.forEach(member => {
+            const option = document.createElement("option");
+            option.value = member;
+            option.textContent = member;
+            memberSelect.append(option);
+          });
+          memberLabel.append(memberTitle, memberSelect);
+          const passwordLabel = document.createElement("label");
+          passwordLabel.className = "entry-field";
+          passwordLabel.htmlFor = "entry-core-password";
+          const passwordTitle = document.createElement("span");
+          passwordTitle.textContent = "組頭密碼";
+          const password = document.createElement("input");
+          password.id = "entry-core-password";
+          password.type = "password";
+          password.autocomplete = "current-password";
+          passwordLabel.append(passwordTitle, password);
+          fields.append(memberLabel, passwordLabel);
+          return;
+        }
+        const positionLabel = document.createElement("label");
+        positionLabel.className = "entry-field";
+        positionLabel.htmlFor = "entry-assistant-position";
+        const positionTitle = document.createElement("span");
+        positionTitle.textContent = "第一步：選擇職位分類";
+        const positionSelect = document.createElement("select");
+        positionSelect.id = "entry-assistant-position";
+        positionSelect.setAttribute("aria-label", "選擇助理職位分類");
+        const positionPlaceholder = document.createElement("option");
+        positionPlaceholder.value = "";
+        positionPlaceholder.textContent = "請先選擇職位";
+        positionSelect.append(positionPlaceholder);
+        assistantPositions.forEach(position => {
+          const option = document.createElement("option");
+          option.value = position;
+          option.textContent = `${position}（${assistants[position].filter(entry => entry.name.trim()).length}）`;
+          positionSelect.append(option);
+        });
+        positionLabel.append(positionTitle, positionSelect);
+
+        const assistantLabel = document.createElement("label");
+        assistantLabel.className = "entry-field";
+        assistantLabel.htmlFor = "entry-assistant-name";
+        const assistantTitle = document.createElement("span");
+        assistantTitle.textContent = "第二步：選擇自己的姓名";
+        const assistantSelect = document.createElement("select");
+        assistantSelect.id = "entry-assistant-name";
+        assistantSelect.setAttribute("aria-label", "選擇助理姓名");
+        assistantSelect.disabled = true;
+        const namePlaceholder = document.createElement("option");
+        namePlaceholder.value = "";
+        namePlaceholder.textContent = "請先選擇職位分類";
+        assistantSelect.append(namePlaceholder);
+        positionSelect.addEventListener("change", () => {
+          assistantSelect.replaceChildren();
+          const position = positionSelect.value;
+          const members = position ? assistants[position].filter(entry => entry.name.trim()) : [];
+          const placeholder = document.createElement("option");
+          placeholder.value = "";
+          placeholder.textContent = position
+            ? (members.length ? "請選擇自己的姓名" : "此職位尚無已登記助理")
+            : "請先選擇職位分類";
+          assistantSelect.append(placeholder);
+          members.forEach(entry => {
+            const option = document.createElement("option");
+            option.value = assistantId(entry.id);
+            option.textContent = entry.name.trim();
+            assistantSelect.append(option);
+          });
+          assistantSelect.disabled = !members.length;
+          $("entry-message").textContent = position && !members.length
+            ? "此職位目前沒有助理名單，請聯絡負責人新增姓名。"
+            : "";
+        });
+        assistantLabel.append(assistantTitle, assistantSelect);
+        fields.append(positionLabel, assistantLabel);
+      }
+
+      function enterAs(role, identity) {
+        currentRole = role;
+        loggedInIdentity = identity;
+        identitySelect.value = "";
+        $("entry-screen").hidden = true;
+        $("app-shell").hidden = false;
+        $("active-identity").hidden = false;
+        $("logout-button").hidden = false;
+        renderAll();
+      }
+
+      function submitEntry() {
+        $("entry-message").textContent = "";
+        if (entryRole.value === "actor") {
+          const actorSelect = $("entry-actor");
+          if (!actorSelect || !actorSelect.value) {
+            $("entry-message").textContent = "目前沒有可登入的演員名單，請聯絡組頭設定飾演者。";
+            return;
+          }
+          enterAs("actor", actorSelect.value);
+          return;
+        }
+        if (entryRole.value === "core") {
+          const password = $("entry-core-password")?.value || "";
+          if (password !== "0705") {
+            $("entry-message").textContent = "密碼不正確，請重新輸入。";
+            $("entry-core-password")?.focus();
+            return;
+          }
+          enterAs("core", `core:${$("entry-core-member").value}`);
+          return;
+        }
+        const assistantSelect = $("entry-assistant-name");
+        if (!assistantSelect || !assistantSelect.value) {
+          $("entry-message").textContent = "助理名單目前為空，請由負責人先新增助理姓名。";
+          return;
+        }
+        enterAs("assistant", assistantSelect.value);
+      }
+
+      function renderParticipantsOverview() {
+        const section = $("participants-overview-card");
+        const canView = Boolean(currentRole);
+        section.hidden = !canView;
+        if (!canView) return;
+        const head = $("participants-overview-head");
+        const body = $("participants-overview-body");
+        head.replaceChildren();
+        body.replaceChildren();
+        if (!validateRange()) return;
+        const dates = getWeeks().flat();
+        const peopleHeader = document.createElement("tr");
+        const peopleLabel = document.createElement("th");
+        peopleLabel.scope = "col";
+        peopleLabel.textContent = "排練安排／參與者";
+        peopleHeader.append(peopleLabel);
+        dates.forEach(entry => {
+          const dateHeader = document.createElement("th");
+          dateHeader.scope = "col";
+          dateHeader.textContent = displayDate(entry.date);
+          peopleHeader.append(dateHeader);
+        });
+        head.append(peopleHeader);
+        periods.forEach(period => {
+          const row = document.createElement("tr");
+          row.className = "overview-schedule-row";
+          const label = document.createElement("th");
+          label.scope = "row";
+          label.textContent = `${period.label}排練`;
+          row.append(label);
+          dates.forEach(entry => {
+            const cell = document.createElement("td");
+            const item = isRecord(actualSchedule[entry.iso]) && isRecord(actualSchedule[entry.iso][period.id])
+              ? actualSchedule[entry.iso][period.id]
+              : {};
+            const details = document.createElement("div");
+            details.className = "overview-schedule-cell";
+            [
+              ["時間", item.time],
+              ["教室", item.room],
+              ["內容", item.title],
+              ["參與者", item.participants],
+              ["備註", item.note]
+            ].forEach(([labelText, value]) => {
+              if (typeof value !== "string" || !value.trim()) return;
+              const detail = document.createElement("span");
+              detail.className = "overview-schedule-detail";
+              detail.textContent = `${labelText}：${value.trim()}`;
+              details.append(detail);
+            });
+            if (!details.childElementCount) details.textContent = "尚未安排";
+            cell.append(details);
+            row.append(cell);
+          });
+          body.append(row);
+        });
+        const people = allPeople();
+        people.forEach(person => {
+          const row = document.createElement("tr");
+          const personCell = document.createElement("th");
+          personCell.scope = "row";
+          personCell.textContent = person.role === "actor" || person.role === "assistant"
+            ? `${person.name}（${person.position}）`
+            : person.name;
+          row.append(personCell);
+          dates.forEach(entry => {
+            const cell = document.createElement("td");
+            const record = availability[person.id];
+            const selected = isRecord(record) && Array.isArray(record[entry.iso]) ? record[entry.iso] : [];
+            const availablePeriods = selected
+              .map(periodId => periods.find(period => period.id === periodId)?.label)
+              .filter(Boolean);
+            if (availablePeriods.length) {
+              availablePeriods.forEach(label => {
+                const periodLabel = document.createElement("span");
+                periodLabel.className = "overview-period";
+                periodLabel.textContent = label;
+                cell.append(periodLabel);
+              });
+            } else {
+              cell.textContent = "—";
+            }
+            row.append(cell);
+          });
+          body.append(row);
+        });
+        if (!people.length) {
+          const row = document.createElement("tr");
+          const cell = document.createElement("td");
+          cell.colSpan = dates.length + 1;
+          cell.textContent = "目前尚無成員資料。";
+          row.append(cell);
+          body.append(row);
+        }
+      }
+
+      function renderRolePanels() {
+        $("actor-panel").classList.toggle("active", currentRole === "actor");
+        $("assistant-panel").hidden = currentRole !== "core";
+        $("core-panel").classList.toggle("active", currentRole === "core");
+        startInput.disabled = currentRole !== "core";
+        endInput.disabled = currentRole !== "core";
+        saturdayInput.disabled = currentRole !== "core";
+      }
+      function canAccessFeature(feature) {
+        if (feature === "management") return currentRole === "core";
+        if (feature === "availability" || feature === "schedule" || feature === "people") return Boolean(currentRole);
+        if (feature === "availability-overview") {
+          return currentRole === "core" ||
+            (currentRole === "assistant" && ["position", "all"].includes(permissions[currentAssistant()?.id] || "own"));
+        }
+        if (feature === "participants-overview") {
+          return Boolean(currentRole);
+        }
+        return false;
+      }
+      function setActiveFeature(feature) {
+        if (feature !== "home" && !canAccessFeature(feature)) return;
+        activeFeature = feature;
+        const isHome = feature === "home";
+        $("feature-home").hidden = !isHome;
+        $("feature-toolbar").hidden = isHome;
+        $("active-feature-title").textContent = isHome ? "" : featureTitles[feature];
+        $("management-section").hidden = feature !== "management";
+        $("availability-card").hidden = feature !== "availability";
+        $("availability-overview-card").hidden = feature !== "availability-overview" || !canAccessFeature(feature);
+        $("schedule-section").hidden = feature !== "schedule";
+        $("people-section").hidden = feature !== "people";
+        $("participants-overview-card").hidden = feature !== "participants-overview" || !canAccessFeature(feature);
+      }
+      function renderFeatureMenu() {
+        document.querySelectorAll("[data-feature]").forEach(button => {
+          button.hidden = !canAccessFeature(button.dataset.feature);
+        });
+        const person = selectedPerson();
+        $("active-identity").textContent = person
+          ? `目前身分：${person.name}`
+          : "目前身分：組頭";
+        if (activeFeature !== "home" && !canAccessFeature(activeFeature)) setActiveFeature("home");
+      }
+      function renderAll() {
+        renderIdentity();
+        renderRolePanels();
+        renderCast();
+        renderAssistantManagement();
+        renderOpenRanges();
+        renderPastDateStatuses();
+        renderAvailability();
+        renderOverview();
+        renderSchedule();
+        renderPeople();
+        renderParticipantsOverview();
+        renderFeatureMenu();
+        setActiveFeature("home");
+      }
+
+      identitySelect.addEventListener("change", () => {
+        renderIdentity();
+        renderAssistantManagement();
+        renderRolePanels();
+        renderAvailability();
+        renderOverview();
+        renderParticipantsOverview();
+        renderFeatureMenu();
+      });
+      [startInput, endInput].forEach(input => input.addEventListener("change", () => {
+        saveRange();
+        renderPastDateStatuses();
+        renderAvailability();
+        renderOverview();
+        renderParticipantsOverview();
+        renderSchedule();
+      }));
+      saturdayInput.addEventListener("change", () => {
+        saveRange();
+        renderPastDateStatuses();
+        renderAvailability();
+        renderOverview();
+        renderParticipantsOverview();
+        renderSchedule();
+      });
+      $("add-open-range").addEventListener("click", () => {
+        const start = $("open-start").value;
+        const end = $("open-end").value;
+        const audience = $("open-audience").value;
+        const message = $("open-range-message");
+        if (!start || !end || start > end) {
+          message.textContent = "請輸入有效區間，結束日需晚於或等於起始日。";
+          return;
+        }
+        message.textContent = "";
+        openRanges.push({ id: makeId(), start, end, audience });
+        openRanges.sort((a, b) => a.start.localeCompare(b.start));
+        saveStored(keys.openRanges, openRanges);
+        if (start < startInput.value) startInput.value = start;
+        if (end > endInput.value) endInput.value = end;
+        saveRange();
+        renderOpenRanges();
+        renderPastDateStatuses();
+        renderAvailability();
+        renderOverview();
+        renderParticipantsOverview();
+        renderSchedule();
+      });
+      $("export-custom").addEventListener("click", exportSelectedRange);
+      $("export-history").addEventListener("click", exportPastRecords);
+      $("export-all").addEventListener("click", exportAllRecords);
+      entryRole.addEventListener("change", renderEntryFields);
+      $("feature-home").addEventListener("click", event => {
+        const button = event.target.closest("[data-feature]");
+        if (button && !button.hidden) setActiveFeature(button.dataset.feature);
+      });
+      $("schedule-preview-toggle").addEventListener("click", () => {
+        const toggle = $("schedule-preview-toggle");
+        const preview = $("schedule-preview");
+        const isOpening = preview.hidden;
+        preview.hidden = !isOpening;
+        toggle.setAttribute("aria-expanded", String(isOpening));
+        toggle.textContent = isOpening ? "收起目前排練班表" : "查看目前排練班表";
+        if (isOpening) renderSchedulePreview();
+      });
+      $("feature-back").addEventListener("click", () => setActiveFeature("home"));
+      $("entry-submit").addEventListener("click", submitEntry);
+      $("entry-role").addEventListener("keydown", event => {
+        if (event.key === "Enter") submitEntry();
+      });
+      $("entry-identity-fields").addEventListener("keydown", event => {
+        if (event.key === "Enter") submitEntry();
+      });
+      $("logout-button").addEventListener("click", () => {
+        currentRole = "";
+        loggedInIdentity = "";
+        $("app-shell").hidden = true;
+        $("entry-screen").hidden = false;
+        $("active-identity").hidden = true;
+        $("logout-button").hidden = true;
+        setActiveFeature("home");
+        entryRole.value = "actor";
+        renderEntryFields();
+      });
+      await loadState();
+      renderEntryFields();
+      $("app-shell").hidden = true;
+    })();
+  </script>
+</body>
+</html>
